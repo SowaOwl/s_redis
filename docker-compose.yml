@@ -1,0 +1,22 @@
+version: "3.7"
+services:
+  redis:
+    image: 'redis:alpine'
+    container_name: redis_api
+    command: redis-server --requirepass root_pass
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./db-data/redis-data:/var/lib/redis
+      - ./db-data/redis.conf:/usr/local/etc/redis/redis.conf
+    environment:
+      - REDIS_REPLICATION_MODE=master
+    networks:
+      - redis_net
+
+networks:
+  redis_net:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: "173.19.0.1/24"
